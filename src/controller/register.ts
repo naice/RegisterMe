@@ -1,62 +1,74 @@
 import { Request, Response, NextFunction } from 'express';
-import axios, { AxiosResponse } from 'axios';
 import * as fs from 'fs';
 
+const fsp = fs.promises;
+
 interface RegisterInput {
-    name: string,
+    name: string;
+    endpoints: Record<string, string>;
+    ip?: string;
 }
 
 interface RegisterObject {
-    name: string,
-    lastSeen: number,
+    name: string;
+    created: number;
+    updated: number;
+    endpoints: Record<string, string>;
+    ip: string;
 }
 
 const registerFileName = "register.json";
-const readRegister = (): RegisterObject[] => {
+const readRegister = async (): Promise<RegisterObject[]> => {
     if (!fs.existsSync(registerFileName)) {
         return [];
     }
     return JSON.parse(
-        fs.readFileSync(registerFileName).toString()
+        (await fsp.readFile(registerFileName)).toString()
     );
 }
 
-// updating a post
+const writeRegister = async (register: RegisterObject[]): Promise<void> => {
+    console.log("writing register", register);
+    await fsp.writeFile(registerFileName, JSON.stringify(register));
+}
+
+// update Register
 const updateRegister = async (req: Request, res: Response, next: NextFunction) => {
-    const register = readRegister();
+    const register = await readRegister();
     const registerInput = req.body as RegisterInput;
+
+    let registerObject = register.find((obj) => obj.name === registerInput.name);
+    const now = Date.now();
+    if (!registerObject) {
+        registerObject = { 
+            ...registerInput, 
+            ip: registerInput.ip ?? req.ip, 
+            updated: now, 
+            created: now 
+        };
+        register.push(registerObject);
+    } else {
+        registerObject = { 
+            ...registerObject, 
+            ...registerInput, 
+            updated: now 
+        };
+    }
+
+    await writeRegister(register);
     
     return res.status(200).json({
-        message: response.data
+        error: 0,
     });
 };
 
-// deleting a post
-const deletePost = async (req: Request, res: Response, next: NextFunction) => {
-    // get the post id from req.params
-    let id: string = req.params.id;
-    // delete the post
-    let response: AxiosResponse = await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`);
-    // return response
+// get Register
+const getRegister = async (req: Request, res: Response, next: NextFunction) => {
+    const register = await readRegister();
+    console.log("register", register);
     return res.status(200).json({
-        message: 'post deleted successfully'
+        register,
     });
 };
 
-// adding a post
-const addPost = async (req: Request, res: Response, next: NextFunction) => {
-    // get the data from req.body
-    let title: string = req.body.title;
-    let body: string = req.body.body;
-    // add the post
-    let response: AxiosResponse = await axios.post(`https://jsonplaceholder.typicode.com/posts`, {
-        title,
-        body
-    });
-    // return response
-    return res.status(200).json({
-        message: response.data
-    });
-};
-
-export default {  updateRegister, deletePost, };
+export default {  updateRegister, getRegister, };
