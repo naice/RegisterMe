@@ -37,7 +37,12 @@ const updateRegister = async (req: Request, res: Response, next: NextFunction) =
     const register = await readRegister();
     const registerInput = req.body as RegisterInput;
 
-    let registerObject = register.find((obj) => obj.name === registerInput.name);
+    const index = register.findIndex((obj) => obj.name === registerInput.name);
+    let registerObject: RegisterObject | undefined = undefined;
+    if (index !== -1) {
+        registerObject = register[index];
+    }
+
     const now = Date.now();
     if (!registerObject) {
         registerObject = { 
@@ -48,7 +53,7 @@ const updateRegister = async (req: Request, res: Response, next: NextFunction) =
         };
         register.push(registerObject);
     } else {
-        registerObject = { 
+        register[index] = { 
             ...registerObject, 
             ...registerInput, 
             updated: now 
