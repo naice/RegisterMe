@@ -13,11 +13,7 @@ interface ProxyRequest {
 // update Register
 const proxy = async (req: Request, res: Response, next: NextFunction) => {
     const p = req.body as ProxyRequest;
-    
     const result = await axios.request({ method: p.method, url: p.target, data: p.payload });
-    
-    console.log(typeof result.data);
-    res.setHeader("Access-Control-Allow-Origin", "*");
     return res.status(200).json(
         result.data
     );
