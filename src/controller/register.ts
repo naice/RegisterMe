@@ -56,6 +56,7 @@ const updateRegister = async (req: Request, res: Response, next: NextFunction) =
         register[index] = { 
             ...registerObject, 
             ...registerInput, 
+            ip: registerInput.ip ?? req.ip, 
             updated: now 
         };
     }
