@@ -4,9 +4,11 @@ import express, { Express } from 'express';
 import morgan from 'morgan';
 import registerRoutes from './routes/register';
 import proxyRoutes from './routes/proxy';
+import cors from 'cors';
 
 const router: Express = express();
 
+router.use(cors());
 /** Logging */
 router.use(morgan('dev'));
 /** Parse the request */
@@ -16,19 +18,19 @@ router.use(express.json());
 
 //router.use(cors);
 
-/** RULES OF OUR API */
-router.use((req, res, next) => {
-    // set the CORS policy
-    res.header('Access-Control-Allow-Origin', '*');
-    // set the CORS headers
-    res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With,Content-Type,Accept, Authorization');
-    // set the CORS method headers
-    if (req.method === 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', '*');
-        return res.status(200).json({});
-    }
-    next();
-});
+// /** RULES OF OUR API */
+// router.use((req, res, next) => {
+//     // set the CORS policy
+//     res.header('Access-Control-Allow-Origin', '*');
+//     // set the CORS headers
+//     res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With,Content-Type,Accept, Authorization');
+//     // set the CORS method headers
+//     if (req.method === 'OPTIONS') {
+//         res.header('Access-Control-Allow-Methods', '*');
+//         return res.status(200).json({});
+//     }
+//     next();
+// });
 
 /** Routes */
 router.use('/', registerRoutes);
