@@ -8,7 +8,11 @@ import cors from 'cors';
 
 const router: Express = express();
 
-router.use(cors({credentials: true, origin: true}));
+router.use(
+    cors({
+        origin: '*'
+    })
+);
 /** Logging */
 router.use(morgan('dev'));
 /** Parse the request */
