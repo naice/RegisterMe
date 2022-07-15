@@ -4,7 +4,6 @@ import express, { Express } from 'express';
 import morgan from 'morgan';
 import registerRoutes from './routes/register';
 import proxyRoutes from './routes/proxy';
-import cors from 'cors';
 
 const router: Express = express();
 
@@ -33,6 +32,7 @@ router.use((req, res, next) => {
 
 /** Routes */
 router.use('/', registerRoutes);
+router.use('/', proxyRoutes);
 
 /** Error handling */
 router.use((req, res, next) => {
