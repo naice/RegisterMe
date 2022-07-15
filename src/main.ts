@@ -8,15 +8,6 @@ import cors from 'cors';
 
 const router: Express = express();
 
-// enable CORS
-router.use(( req, res, next ) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "x-requested-with, content-type");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Max-Age", "1000000000");
-    if ('OPTIONS' == req.method) { res.send(200); } else { next(); } 
-});
 /** Logging */
 router.use(morgan('dev'));
 /** Parse the request */
@@ -39,6 +30,16 @@ router.use(express.json());
 //     }
 //     next();
 // });
+
+// enable CORS
+router.use(( req, res, next ) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "x-requested-with, content-type");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Max-Age", "1000000000");
+    if ('OPTIONS' == req.method) { res.send(200); } else { next(); } 
+});
 
 /** Routes */
 router.use('/', registerRoutes);
