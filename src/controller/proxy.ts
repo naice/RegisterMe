@@ -12,6 +12,12 @@ interface ProxyRequest {
 
 // update Register
 const proxy = async (req: Request, res: Response, next: NextFunction) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "x-requested-with, content-type");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Max-Age", "1000000000");
+    if ('OPTIONS' == req.method) { res.send(200); }
     const p = req.body as ProxyRequest;
 
     let response: AxiosResponse<any, any> | undefined;
