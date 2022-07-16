@@ -21,11 +21,7 @@ router.use(express.json());
 router.use((req, res, next) => {
 
     // set the CORS policy
-    if ((req.get("host")?.indexOf("localhost") ?? -1) !== -1) {
-        res.header('Access-Control-Allow-Origin', 'localhost');
-    } else {
-        res.header('Access-Control-Allow-Origin', '*');
-    }
+    res.header('Access-Control-Allow-Origin', '*');
     
     // set the CORS headers
     res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With,Content-Type,Accept, Authorization');
