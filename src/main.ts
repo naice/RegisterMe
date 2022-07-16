@@ -4,12 +4,15 @@ import express, { Express } from 'express';
 import morgan from 'morgan';
 import registerRoutes from './routes/register';
 import proxyRoutes from './routes/proxy';
+import deployRoutes from './routes/deploy';
 import cors from 'cors';
+import fileUpload from 'express-fileupload';
 
 const router: Express = express();
 
 /** Logging */
 router.use(morgan('dev'));
+router.use(fileUpload({ useTempFiles: true }));
 /** Parse the request */
 router.use(express.urlencoded({ extended: false }));
 /** Takes care of JSON data */
@@ -43,6 +46,7 @@ router.use((req, res, next) => {
 /** Routes */
 router.use('/', registerRoutes);
 router.use('/', proxyRoutes);
+router.use('/', deployRoutes);
 
 /** Error handling */
 router.use((req, res, next) => {
