@@ -19,8 +19,14 @@ router.use(express.json());
 
 /** RULES OF OUR API */
 router.use((req, res, next) => {
+
     // set the CORS policy
-    res.header('Access-Control-Allow-Origin', '*, localhost, 127.0.0.1');
+    if ((req.get("host")?.indexOf("localhost") ?? -1) !== -1) {
+        res.header('Access-Control-Allow-Origin', 'localhost');
+    } else {
+        res.header('Access-Control-Allow-Origin', '*');
+    }
+    
     // set the CORS headers
     res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With,Content-Type,Accept, Authorization');
     // set the CORS method headers
