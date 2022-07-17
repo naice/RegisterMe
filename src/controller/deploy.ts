@@ -37,9 +37,9 @@ const deploy = async (req: Request, res: Response, next: NextFunction) => {
         await exec(tarCommand);
     } catch (error: any) {
         console.log("tar exitcode " + error.code);
-        return res.status(500).send(error.stderr);
+        return res.status(500).send(error.code);
     }
-        
+
     return res.status(200).send();
 };
 
