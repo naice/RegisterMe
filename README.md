@@ -39,7 +39,7 @@ updated can help in detecting the availability of your devices.
 }]
 ```
 ## Arduino Sample 
-Find the arduino sample under `arduino_sample/`
+Find the arduino sample here: [arduino sample](/arduino_sample)
 
 
 # route `/deploy`
